@@ -1,0 +1,10 @@
+version: "3"
+services:
+    botweet-springboot:
+        image: "botweet-springboot"
+        container_name: "botweet-springboot"
+        ports:
+            - "8080:8080"
+    cassandra:
+        image: "cassandra"
+        container_name: "botweet-cassandra"
