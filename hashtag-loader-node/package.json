@@ -1,0 +1,20 @@
+{
+  "name": "hashtag-loader-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "PORT=3000 nodemon index.js"
+  },
+  "author": "Yuri Oliveira",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "cassandra-driver": "^4.6.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
