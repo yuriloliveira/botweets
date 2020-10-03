@@ -2,38 +2,22 @@
 CREATE KEYSPACE IF NOT EXISTS tweet WITH replication =
     { 'class': 'SimpleStrategy', 'replication_factor': 3 };
 
--- tweet tables --
-CREATE TABLE IF NOT EXISTS tweet.tweets_by_hashtag (
-    hashtag text,
-    tweet_id text,
-    updated_at timestamp,
-    PRIMARY KEY ((hashtag), tweet_id)
-)
-WITH comment = 'Q1. Encontrar tweets por hashtag'
-AND CLUSTERING ORDER BY (tweet_id ASC);
-CREATE TABLE IF NOT EXISTS tweet.tweets_by_lang (
-    hashtag text,
+-- Tables --
+CREATE TABLE IF NOT EXISTS tweet.tweets (
+    tweet_id bigint PRIMARY KEY,
+    hashtags list<text>,
     lang text,
-    tweet_id text,
-    PRIMARY KEY ((hashtag, lang), tweet_id)
-)
-WITH comment = 'Q3. Encontrar tweets de uma hashtag por lingua'
-AND CLUSTERING ORDER BY (tweet_id ASC);
-CREATE TABLE IF NOT EXISTS tweet.tweets_by_hour (
-    hashtag text,
-    hour_of_day smallint,
-    tweet_id text,
-    PRIMARY KEY ((hashtag, hour_of_day), tweet_id)
-)
-WITH comment = 'Q4. Encontrar tweets de uma hashtad por hora do dia'
-AND CLUSTERING ORDER BY (tweet_id ASC);
--- Keyspace user --
-CREATE KEYSPACE IF NOT EXISTS user WITH replication =
-    { 'class': 'SimpleStrategy', 'replication_factor': 3 };
-CREATE TABLE IF NOT EXISTS user.users_by_follower_count (
-    follower_count bigint,
-    user_id text,
-    PRIMARY KEY ((follower_count), user_id)
-)
-WITH comment = 'Q2. Encontrar usuarios com maior numero de seguidores'
-AND CLUSTERING ORDER BY (user_id ASC);
+    created_at timestamp,
+    updated_at timestamp
+);
+-- tweet.tweets indexes --
+CREATE INDEX IF NOT EXISTS tweets_hashtags_idx ON tweet.tweets (hashtags);
+CREATE INDEX IF NOT EXISTS tweets_lang_idx ON tweet.tweets (lang);
+CREATE INDEX IF NOT EXISTS tweets_craeted_at_idx ON tweet.tweets (created_at);
+
+
+CREATE TABLE IF NOT EXISTS tweet.users (
+    user_id bigint,
+    followers_count bigint,
+    PRIMARY KEY ((user_id), followers_count) 
+) WITH CLUSTERING ORDER BY (followers_count ASC);
