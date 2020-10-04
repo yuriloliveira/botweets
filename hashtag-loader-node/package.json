@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "PORT=3000 nodemon index.js"
+    "start": "nodemon index.js"
   },
   "author": "Yuri Oliveira",
   "license": "ISC",

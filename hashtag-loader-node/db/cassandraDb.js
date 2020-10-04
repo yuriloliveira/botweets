@@ -1,7 +1,9 @@
 const cassandra = require('cassandra-driver');
+const config = require('../config');
+
 function CassandraDb() {
     const client = new cassandra.Client({
-        contactPoints: ['localhost:5432'],
+        contactPoints: [`${config.CASSADRA_DB_HOST}:9042`],
         localDataCenter: 'datacenter1',
         keyspace: 'tweet'
     });
