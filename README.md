@@ -7,11 +7,17 @@ Docker
 docker-compose
 ```
 
+## Construindo a imagem da api
+Da pasta raiz do projeto, rode o comando
+```
+$ sudo docker build -t botweet-api ./tweets-api/
+```
+
 ## Iniciando as aplicações
 ```
-$ sudo docker-compose up
+$ sudo docker-compose up -d
 ```
-Este comando irá iniciar o banco de dados cassandra aceitando comandos cql na porta 5432.
+Este comando irá iniciar o banco de dados cassandra aceitando comandos cql na porta 9042 e a API em python.
 
 Para rodar a aplicação que carrega os tweets, a partir da pasta raiz do projeto, rode os seguintes comandos:
 ```
