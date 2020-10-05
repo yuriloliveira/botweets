@@ -11,6 +11,7 @@ function TweetService() {
 
         await db.createManyTweets(tweetsToBeCreated.map((tweet) => ({
             id: tweet.id,
+            user_id: tweet.user.id,
             hashtags: tweet.entities.hashtags.map(({ text }) => unaccent(text.toLowerCase())),
             lang: tweet.lang || tweet.metadata.iso_language_code || null,
             created_at: new Date(tweet.created_at),
@@ -19,7 +20,9 @@ function TweetService() {
 
         await db.createManyUsers(tweetsToBeCreated.map((tweet) => ({
             user_id: tweet.user.id,
-            followers_count: tweet.user.followers_count
+            updated_at: new Date(tweet.created_at),
+            followers_count: tweet.user.followers_count,
+            screen_name: tweet.user.screen_name
         })));
 
         return tweetsToBeCreated;
