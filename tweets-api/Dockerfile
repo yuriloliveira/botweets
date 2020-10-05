@@ -2,6 +2,7 @@ FROM coorpacademy/docker-pyspark:latest
 
 # installs pyspark to be used in python
 RUN pip3 install pyspark
+RUN pip3 install flask
 
 # solves "key not found: _PYSPARK_DRIVER_CALLBACK_HOST/Java Gateway/PySpark 2.3.1" error
 RUN export PYTHONPATH=$SPARK_HOME/python/:$PYTHONPATH
