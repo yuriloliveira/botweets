@@ -11,7 +11,7 @@ function TweetService() {
 
         await db.createManyTweets(tweetsToBeCreated.map((tweet) => ({
             id: tweet.id,
-            hashtags: tweet.entities.hashtags.map(({ text }) => text),
+            hashtags: tweet.entities.hashtags.map(({ text }) => unaccent(text.toLowerCase())),
             lang: tweet.lang || tweet.metadata.iso_language_code || null,
             created_at: new Date(tweet.created_at),
             updated_at: new Date(),
@@ -31,3 +31,8 @@ function TweetService() {
 }
 
 module.exports = TweetService;
+
+function unaccent(str) {
+    // code extracted from https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
