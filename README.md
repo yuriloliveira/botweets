@@ -32,7 +32,6 @@ Na pasta raiz do projeto, rode o seguinte comando:
 $ ./database/create-database ./database
 ```
 
-
 ## Construind a imagem docker botweet-springboot (não use esta opção)
 Esta imagem está sendo mantida para ser usada no relatório somente.
 ```

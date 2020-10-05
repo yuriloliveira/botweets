@@ -8,5 +8,8 @@ services:
         image: "botweet-api"
         container_name: "botweet-api"
         network_mode: "host"
+        depends_on:
+            - cassandra
         volumes:
             - "./tweets-api:/usr/dev/tweets-api"
+        restart: on-failure:10 # Will try to restart 10 times

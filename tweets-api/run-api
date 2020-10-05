@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# solves "key not found: _PYSPARK_DRIVER_CALLBACK_HOST/Java Gateway/PySpark 2.3.1" error
+export PYTHONPATH=$SPARK_HOME/python/:$PYTHONPATH
+export PYTHONPATH=$SPARK_HOME/python/lib/py4j-0.8.2.1-src.zip:$PYTHONPATH
+
+python3 /usr/dev/tweets-api/tweets-api.py
