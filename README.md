@@ -1,41 +1,47 @@
 ## Pré-requisitos
 ```
-npm or yarn (recommended)
-nodejs
-cassandra
+npm or yarn (recomendado)
+Nodejs
 Docker
 docker-compose
-```
-
-## Construindo a imagem da api
-Da pasta raiz do projeto, rode o comando
-```
-$ sudo docker build -t botweet-api ./tweets-api/
 ```
 
 ## Iniciando as aplicações
 ```
 $ sudo docker-compose up -d
 ```
-Este comando irá iniciar o banco de dados cassandra aceitando comandos cql na porta 9042 e a API em python.
+Este comando irá iniciar todas as aplicações, banco de dados e criará o *schema* do banco de dados.
 
-Para rodar a aplicação que carrega os tweets, a partir da pasta raiz do projeto, rode os seguintes comandos:
+## Aplicações
+### Banco de dados Cassandra
+O banco de dados aceita comandos CQL através da porta 9042.
+Para acessar o banco diretamente, rode o comando
 ```
-$ cd hashtag-loader-node
-$ yarn start
+$ docker exec -it botweet-cassandra cqlsh
 ```
-**Importante: para que seja possível carregar os tweets, é necessário passar um token válido da API do Twitter através da variável de ambiente `TWITTER_BEARER_TOKEN`**
+### Tweets API
+API que executa as consultas propostas através do PySpark acessando o banco de dados Cassandra.
+Esta API, por padrão, roda em `http://localhost:5000`
 
-## Criando keyspaces e tabelas
-Na pasta raiz do projeto, rode o seguinte comando:
+Endpoints disponíveis:
 ```
-$ ./database/create-database ./database
+GET /hashtags
+GET /hashtags/<hashtag>/tweets/lang/<lang>
+GET /hashtags/<hashtag>/tweets/lang/<lang>/count
+GET /hashtags/<hashtag>/tweets/count/by-hour
+GET /hashtags/<hashtag>/users/most-followed
 ```
 
-## Construind a imagem docker botweet-springboot (não use esta opção)
-Esta imagem está sendo mantida para ser usada no relatório somente.
+### Hashtag loader (node)
+API que carrega as informações dos tweets de uma hashtag no banco de dados. Esta API, por padrão, roda em `http://localhost:3000`
+
+Endpoints disponíveis:
 ```
-$ cd hashtag-loader
-$ ./mvnw install
-$ sudo docker build -t botweet-springboot .
+POST /hashtags/<hashtag>
 ```
+**Importante: para que seja possível carregar os tweets, é necessário passar um token válido da API do Twitter através da variável de ambiente `TWITTER_BEARER_TOKEN`.**
+
+### Bot do Telegram
+Aplicação Node.js que interpreta mensagens recebidas pelo Bot do Telegram.
+
+**Importante: para que o Bot rode corretamente, é necessário passar um token de Bot do Telegram através da variável de ambiente `TELEGRAM_BOT_TOKEN`.**
