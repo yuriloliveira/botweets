@@ -22,7 +22,7 @@ services:
             - ./database/create-database.cql:/usr/dev/database/create-database.cql
         command: /bin/bash -c "echo loading cassandra keyspace && cqlsh -f /usr/dev/database/create-database.cql"
     botweet-api:
-        image: "botweet-api"
+        image: "yuriloliveira/botweet-api"
         container_name: "botweet-api"
         network_mode: "host"
         depends_on:
