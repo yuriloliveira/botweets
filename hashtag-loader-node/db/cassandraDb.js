@@ -12,20 +12,6 @@ function CassandraDb() {
         if (tweets.length === 0) {
             return [];
         }
-        
-        const insertPromises = tweets.map((tweet) =>
-            client.execute(
-                'INSERT INTO tweets (tweet_id, hashtags, lang, created_at, updated_at) VALUES (?, ?, ?, ?, ?);',
-                buildCreateTweetReplacements(tweet)
-            )
-        );
-        return Promise.all(insertPromises);
-    }
-
-    async function createManyTweets(tweets) {
-        if (tweets.length === 0) {
-            return [];
-        }
 
         const insertPromises = tweets.map((tweet) =>
             client.execute(
