@@ -30,8 +30,18 @@ services:
         volumes:
             - "./tweets-api:/usr/dev/tweets-api"
         restart: on-failure:10 # Will try to restart 10 times
+    botweet-bot:
+        image: "node:12"
+        container_name: "botweet-bot"
+        network_mode: "host"
+        depends_on:
+            - botweet-cassandra-load-keyspace
+        volumes:
+            - "./telegram-bot:/usr/dev/telegram-bot"
+        restart: on-failure:10
+        command: /bin/bash -c "cd /usr/dev/telegram-bot && yarn install && yarn start"
     botweet-hashtag-loader-node:
-        image: "botweet-hashtag-loader-node"
+        image: "node:12"
         container_name: "botweet-hashtag-loader-node"
         network_mode: "host"
         depends_on:
@@ -39,3 +49,4 @@ services:
         volumes:
             - "./hashtag-loader-node:/usr/dev/hashtag-loader-node"
         restart: on-failure:10
+        command: /bin/bash -c "cd /usr/dev/hashtag-loader-node && yarn install && yarn start"
