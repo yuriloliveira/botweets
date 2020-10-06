@@ -46,19 +46,24 @@ class TweetAnalytics:
             .select(users.user_id, users.screen_name, users.followers_count)\
             .orderBy(users.updated_at.desc())\
             .dropDuplicates(['user_id'])
-        result = result.orderBy(result.followers_count.desc())
+        result = result.orderBy(result.followers_count.desc()).limit(limit)
         return parse_json_response(result.toJSON().collect())
 
     def get_all_hashtags(self):
         hashtags = self.__tweets_df.select(explode('hashtags').alias('hashtag'), 'updated_at')
         hashtags = hashtags.orderBy(hashtags.updated_at.desc()).dropDuplicates(['hashtag'])
         # dropDuplicates does not keep the order, so must order again
-        hashtags = hashtags.orderBy(hashtags.updated_at.desc())
-        first_hashtag = hashtags.collect()[0]
-        hashtags = hashtags.select('hashtag')
-        return (parse_json_response(hashtags.toJSON().collect()), first_hashtag['updated_at'])
+        hashtags = hashtags.orderBy(hashtags.updated_at.desc()).collect()
+        return (self.__extract_hashtags_from_row_list(hashtags), hashtags[0]['updated_at'])
 
     # private methods
     def __get_tweets_by_hashtag_and_lang(self, hashtag, lang):
         tweetsByHashtag = self.__tweets_df.where(array_contains(self.__tweets_df.hashtags, hashtag))
         return tweetsByHashtag.where(tweetsByHashtag['lang'] == lang)
+
+    def __extract_hashtags_from_row_list(self, hashtags):
+        results = []
+        for row in hashtags:
+            results.append(row['hashtag'])
+        
+        return results
