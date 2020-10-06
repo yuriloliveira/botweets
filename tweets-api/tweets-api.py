@@ -8,19 +8,20 @@ from pyspark import SparkContext
 from pyspark.sql import SQLContext
 from pyspark.sql.functions import array_contains, hour
 from analytics.tweet_analytics import TweetAnalytics
-from analytics.user_analytics import UserAnalytics
 
 sc = SparkContext("local", "movie lens app")
 sqlContext = SQLContext(sc)
 
 tweet_analytics = TweetAnalytics(sqlContext)
-tweet_analytics.load_tweets()
-
-user_analytics = UserAnalytics(sqlContext)
-user_analytics.load_users()
+tweet_analytics.load()
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+
+@app.route('/hashtags', methods=['GET'])
+def get_all_hashtags():
+    (hashtags, last_updated_at) = tweet_analytics.get_all_hashtags()
+    return jsonify({ 'hashtags': hashtags, 'last_updated_at': last_updated_at })
 
 @app.route('/hashtags/<hashtag>/tweets/lang/<lang>', methods=['GET'])
 def get_tweets_by_lang(hashtag, lang):
@@ -41,10 +42,10 @@ def group_tweets_hour(hashtag):
     return jsonify({ 'hashtag': hashtag_lower, 'tweets_by_hour': tweets_by_hour })
 
 
-@app.route('/users/most_followed', methods=['GET'])
-def get_users():
+@app.route('/hashtags/<hashtag>/users/most-followed', methods=['GET'])
+def get_most_followed_users(hashtag):
     limit = request.args.get('limit', 5)
-    most_followed_users = user_analytics.get_most_followed_users(int(limit))
+    most_followed_users = tweet_analytics.get_most_followed_users(hashtag, limit=int(limit))
     return jsonify({ 'users': most_followed_users })
 
 app.run()
