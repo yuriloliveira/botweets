@@ -10,7 +10,7 @@ function TweetApi() {
     });
 
     async function searchTweetsByHashtag(hashtag) {
-        const response = await tweetClient.get(`https://api.twitter.com/1.1/search/tweets.json?q=%23${hashtag}`);
+        const response = await tweetClient.get(`https://api.twitter.com/1.1/search/tweets.json?q=%23${hashtag}&count=100&result_type=recent`);
         const { statuses } = response.data;
         return statuses;
     }
