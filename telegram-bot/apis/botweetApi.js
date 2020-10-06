@@ -13,18 +13,24 @@ function BotweetApi() {
 
     async function getTweetsFromHashtagGroupedByHourOfDay(hashtag) {
         const { data } = await axiosClient.get(`${config.BOTWEET_API_BASE_URL}/hashtags/${hashtag}/tweets/count/by-hour`);
-        return data.tweets_by_hour.map(JSON.parse);
+        return data.tweets_by_hour;
     }
 
-    async function getMostFollowedUsers() {
-        const { data } = await axiosClient.get(`${config.BOTWEET_API_BASE_URL}/users/most_followed?limit=5`);
-        return data.users.map(JSON.parse);
+    async function getMostFollowedUsersByHashtag(hashtag) {
+        const { data } = await axiosClient.get(`${config.BOTWEET_API_BASE_URL}/hashtags/${hashtag}/users/most-followed?limit=5`);
+        return data.users;
+    }
+
+    async function getAllHashtags() {
+        const { data } = await axiosClient.get(`${config.BOTWEET_API_BASE_URL}/hashtags`);
+        return data;
     }
 
     return {
         getTweetCountByHashtagAndLang,
         getTweetsFromHashtagGroupedByHourOfDay,
-        getMostFollowedUsers
+        getMostFollowedUsersByHashtag,
+        getAllHashtags
     }
 }
 
