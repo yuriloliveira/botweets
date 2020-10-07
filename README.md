@@ -1,3 +1,6 @@
+## Interagindo com o Bot
+Para interagir com o Bot, basta enviar uma mensagem no seguinte formato: **#hashtag_name** e o Bot irá responder com as estatísticas dos tweets da hashtag solicitada.
+
 ## Pré-requisitos
 ```
 npm or yarn (recomendado)
